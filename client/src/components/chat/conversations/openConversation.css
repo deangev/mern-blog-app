@@ -1,0 +1,136 @@
+.conversation-chat-container {
+    width: 100% !important;
+    display: flex;
+    height: 92vh;
+    position: absolute;
+    bottom: 0;
+}
+
+.text-message {
+    font-size: 1.8rem;
+    margin: 2rem;
+}
+
+.chat-container {
+    margin: 0 auto;
+    width: 50%;
+}
+.messages-container {
+    margin-top: 2rem;
+}
+
+.chat-input {
+    margin: 0 auto;
+    width: 50%;
+}
+
+.conversation-contacts-list {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 20vw;
+    border-left:  #cbcdcf 1px solid;
+}
+
+.conversation-contacts-list2 {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.conversation-contacts-list h1 {
+    margin-top: 3rem;
+    font-size: 3rem;
+    text-align: center !important;
+    padding-bottom: 3rem;
+    color: #1877f2;
+    border-bottom: #cbcdcf 1px solid;
+}
+
+.conversation-contact {
+    margin-top: 2rem;
+    font-size: 2.5rem;
+    padding-left: 3rem;
+    padding-top: .2rem;
+}
+
+.crown-minus-icon {
+    position: relative;
+    bottom: .3rem;
+}
+
+.minus-icon-contacts {
+    cursor: pointer;
+    color: red;
+}
+
+#leave-conversation-button {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 8%;
+    font-size: 2rem;
+}
+
+.leave-modal-header {
+    font-size: 2.5rem;
+    color: #1877f2;
+}
+
+#modal-title-leave {
+    font-size: 2.3rem !important;
+    text-align: center;
+}
+
+.leave-modal-body button {
+    width: 45%;
+    height: 4rem;
+    font-size: 1.7rem;
+    margin: 1rem;
+    margin-top: 4rem;
+}
+
+@media only screen and (max-width: 1050px) {
+    .conversation-chat-container {
+        display: block;
+        height: auto;
+        position: absolute;
+        top: 180vh;
+        height: 90%;
+        background-color: #f0f2f5;
+    }
+
+    .conversation-contacts-list {
+        display: block;
+        height: auto;
+        position: absolute;
+        top: -90vh;
+        width: 100%;
+        height: 100%;
+        background-color: #f0f2f5;
+        /* padding-bottom: 2rem; */
+    }
+
+
+    .chat-container {
+        width: 100%;
+        /* height: 80%; */
+    }
+
+    .chat-input {
+        width: 100%;
+    }
+
+    #chat-input-button {
+        width: 10%;
+        margin-right: 2rem;
+    }
+
+    #leave-conversation-button {
+        height: 5rem;
+    }
+
+    .leave-modal-body button {
+        width: 43%;
+    }
+}

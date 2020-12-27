@@ -1,0 +1,19 @@
+.sContact {
+    font-size: 2rem;
+    padding-bottom: 1.5rem !important;
+    padding-top: 1.5rem !important;
+    color: black;
+    background-color: #f0f2f5 !important;
+}
+
+.sContact span {
+    margin-left: 2rem;
+}
+
+.remove-contact-icon {
+    height: 100%;
+    display: flex;
+    align-self: center;
+    cursor: pointer;
+    color: red;
+}

@@ -1,0 +1,16 @@
+
+.li {
+    background-color: #f0f2f5 !important;
+    padding-bottom: 2rem !important;
+    padding-top: 2rem !important;
+    font-size: 1.8rem;
+    color: black !important;
+    z-index: 0;
+}
+
+.li:focus, .active.li {
+    color: white !important;
+    background-color:  #1877f2 !important;
+    outline: none; 
+    z-index: 0;  
+}
