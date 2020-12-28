@@ -105,12 +105,12 @@
 .single-comment {
     position: relative;
     padding-bottom: 3rem;
+    display: block;
 }
 
 .commenter-user-icon-container {
     display: inline-block;
-    position: relative;
-    bottom: 2.5rem;
+    position: absolute;
 }
 
 .comment-content-name {
@@ -119,6 +119,7 @@
     border-radius: 1.5rem;
     padding: 1rem;
     max-width: 80%;
+    margin-left: 5rem;
 }
 
 .commenter-name {

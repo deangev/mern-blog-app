@@ -98,7 +98,8 @@ export default function App() {
             let allPosts = await Axios.get(
                 "http://localhost:5000/home/get-posts"
             )
-            setPosts(allPosts.data)
+            const postArray = allPosts.data.reverse();
+            setPosts(postArray)
         }
 
         getPosts();
