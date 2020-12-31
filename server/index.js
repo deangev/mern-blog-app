@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const io = require('socket.io')(5001);
+const multer = require('multer')
 require('dotenv').config();
 
 const app = express();
@@ -38,7 +39,8 @@ app.use("/users", require("./routes/userRouter"))
 
 app.use("/chat", require("./routes/chatRouter"))
 
-
+app.use("/images", require("./routes/imageRouter"))
+//////////////////////////////////////////////////////////
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server is on port ${PORT}`))

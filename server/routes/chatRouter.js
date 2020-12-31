@@ -48,7 +48,7 @@ router.post('/delete-contact', async (req, res) => {
         const { userId, contactId } = req.body;
         const deletedUser = await User.findByIdAndUpdate(userId, {
             $pull: {
-                contacts: {id: contactId}
+                contacts: { id: contactId }
             }
         })
         res.json(deletedUser)
@@ -70,6 +70,20 @@ router.post('/conversation', async (req, res) => {
         const savedConversation = await newConversation.save();
         res.json(savedConversation)
 
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
+})
+
+router.post('/add-contacts-to-conversation', async (req, res) => {
+    try {
+        const { contacts, conversationId } = req.body;
+        const newContacts = await Conversation.findByIdAndUpdate(conversationId, {
+            $push: {
+                contacts: contacts
+            }
+        })
+        res.json(newContacts)
     } catch (err) {
         res.status(500).json({ message: err.message })
     }

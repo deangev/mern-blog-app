@@ -42,6 +42,7 @@ export default function NewConversationModal({ closeModal }) {
         })
     }
 
+
     return (
         <>
             <Modal.Header className="conversations-modal-header" closeButton>Create Conversation</Modal.Header>
@@ -65,6 +66,7 @@ export default function NewConversationModal({ closeModal }) {
                         <Errors message={error} />
                     )}
                     <Button className="create-button" type="submit">Create</Button>
+                    
                 </Form>
             </Modal.Body>
         </>

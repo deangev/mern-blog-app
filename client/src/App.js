@@ -11,6 +11,7 @@ import ContactsProvider from './context/ContactsContext'
 import ConversationsProvider from './context/ConversationsContext'
 import SocketProvider from './context/SocketProvider'
 import PostsProvider from './context/PostsProvider'
+import Profile from './components/pages/Profile';
 
 export default function App() {
     const [userData, setUserData] = useState({
@@ -114,6 +115,7 @@ export default function App() {
                         <Route exact path="/" component={Home} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/register" component={Register} />
+                        <Route exact path="/profile" component={Profile} />
                         <SocketProvider>
                             <ContactsProvider.Provider value={{ contacts, setContacts }}>
                                 <ConversationsProvider.Provider value={conversationValue}>

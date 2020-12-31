@@ -7,15 +7,21 @@ import ConversationsContext from '../../../context/ConversationsContext';
 import './openConversation.css'
 import { useSocket } from '../../../context/SocketProvider';
 import { FaCrown } from 'react-icons/fa'
-import { AiFillMinusCircle } from 'react-icons/ai'
+import { AiFillMinusCircle, AiOutlineSend } from 'react-icons/ai'
+import ContactsContext from '../../../context/ContactsContext';
+import Errors from '../../misc/Errors';
 
 export default function OpenConversation() {
     const [text, setText] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [modalOpen2, setModalOpen2] = useState(false);
+    const [modalOpen3, setModalOpen3] = useState(false);
     const [removeUser, setRemoveUser] = useState();
     const { userData } = useContext(UserContext);
+    const [selectedContactIds, setSelectedContactIds] = useState([])
     const { conversations, selectedConversation, setSelectedConversation } = useContext(ConversationsContext)
+    const { contacts } = useContext(ContactsContext)
+    const [error, setError] = useState();
     const socket = useSocket()
 
     const setRef = useCallback(node => {
@@ -23,7 +29,40 @@ export default function OpenConversation() {
             node.scrollIntoView({ smooth: true })
         }
     }, [])
+    
+    const handleSubmitContact = async (e) => {
+        e.preventDefault()
+        const addContactToConversation = async (req, res) => {
+            try {
+                console.log(selectedContactIds);
+                closeModal3()
+                await Axios.post("http://localhost:5000/chat/add-contacts-to-conversation", {
+                    contacts: selectedContactIds,
+                    conversationId: selectedConversation[0].id
+                })
 
+            } catch (err) {
+                err.response.data.message && setError(err.response.data.message);
+            }
+        }
+        selectedContactIds.map(obj => (
+            selectedConversation[0].contacts.push(obj)
+        ))
+        setSelectedContactIds([])
+        addContactToConversation()
+    }
+
+    function handleCheckboxChange(contactId) {
+        setSelectedContactIds(prevSelectedContactIds => {
+            if (prevSelectedContactIds.includes(contactId.id)) {
+                return prevSelectedContactIds.filter(prevId => {
+                    return contactId.id !== prevId
+                })
+            } else {
+                return [...prevSelectedContactIds, contactId]
+            }
+        })
+    }
 
     const addMessageToConversation = useCallback(({ conversationRec, senderName, senderId, text }) => {
 
@@ -111,6 +150,10 @@ export default function OpenConversation() {
         setModalOpen2(false)
     }
 
+    function closeModal3() {
+        setModalOpen3(false)
+    }
+
 
     function openRemoveModal(id) {
         setModalOpen2(true)
@@ -120,6 +163,7 @@ export default function OpenConversation() {
     const removeConversationContact = async (index) => {
         try {
             selectedConversation[0].contacts.splice(index, 1)
+            closeModal2()
             await Axios.post(
                 'http://localhost:5000/chat/delete-conversation-contact',
                 {
@@ -128,7 +172,6 @@ export default function OpenConversation() {
                 }
             )
             setRemoveUser()
-            closeModal2()
         } catch (err) {
             console.log(err);
         }
@@ -180,7 +223,7 @@ export default function OpenConversation() {
                         >
                         </Form.Control>
                         <InputGroup.Append id="chat-input-button">
-                            <Button type="submit" style={{ fontSize: '2.3rem', width: '15rem' }}>Send</Button>
+                            <Button type="submit" style={{ fontSize: '2.3rem', width: '6rem' }}><AiOutlineSend /></Button>
                         </InputGroup.Append>
                     </InputGroup>
                 </Form.Group>
@@ -188,7 +231,7 @@ export default function OpenConversation() {
             <div className="conversation-contacts-list ">
                 <div style={{ position: 'relative', height: '100%', width: '100%' }}>
                     <div className="conversation-contacts-list2">
-                        <div style={{ position: 'relative' }}>
+                        <div style={{ position: 'relative', height: '83%' }}>
                             <div style={{ position: 'relative' }}>
                                 <h1>Contacts</h1>
                             </div>
@@ -196,10 +239,10 @@ export default function OpenConversation() {
                                 {selectedConversation && selectedConversation[0].contacts.map((contact, index) => {
                                     return (
                                         <div key={index} className="conversation-contact d-flex justify-content-between">
-                                            {contact.name.charAt(0).toUpperCase() + contact.name.slice(1)}
+                                            {contact.name && contact.name.charAt(0).toUpperCase() + contact.name.slice(1)}
                                             <div className="crown-minus-icon pr-5">
                                                 {selectedConversation[0].contacts[0].id === contact.id ?
-                                                    <FaCrown style={{color: '#fbbc05'}}/> :
+                                                    <FaCrown style={{ color: '#fbbc05' }} /> :
                                                     selectedConversation[0].contacts[0].id === userData.id && <AiFillMinusCircle onClick={() => openRemoveModal(contact)} className="minus-icon-contacts" />
                                                 }
                                                 <Modal show={modalOpen2} onHide={closeModal2} >
@@ -231,9 +274,43 @@ export default function OpenConversation() {
                             </Modal>
                         </div>
                     </div>
-                    <Button id="leave-conversation-button" className="rounded-0" onClick={() => setModalOpen(true)}>
-                        Leave conversation
-                    </Button>
+                    <div className="conversations-buttons">
+                        {selectedConversation[0].contacts[0].id === userData.id && <Button id="add-contacts-button" variant="outline-success" onClick={() => setModalOpen3(true)}>
+                            Add contacts
+                        </Button>}
+
+                        <Button id="leave-conversation-button" variant="outline-danger" className='rounded-0' style={{position: `${selectedConversation[0].contacts[0].id !== userData.id &&'absolute'}`, bottom: `${selectedConversation[0].contacts[0].id !== userData.id && '0'}`, left: `${selectedConversation[0].contacts[0].id !== userData.id && '0'}`}} onClick={() => setModalOpen(true)}>
+                            Leave conversation
+                        </Button>
+                    </div>
+
+
+                    <Modal show={modalOpen3} onHide={closeModal3} >
+                        <>
+                            <Modal.Header className="leave-modal-header" closeButton>Add contact</Modal.Header>
+                            <Modal.Body className="leave-modal-body">
+                                <Form onSubmit={handleSubmitContact}>
+                                    {contacts.map(contact => (
+                                        selectedConversation[0].contacts.some(c => c.id === contact.id) ? null :
+                                            <Form.Group controlId={contact.id} key={contact.id}>
+                                                <Form.Check
+                                                    style={{fontSize: '1.9rem', color: '#1877f2', paddingLeft: '2.4rem'}}
+                                                    type="checkbox"
+                                                    value={selectedContactIds.includes(contact.id)}
+                                                    label={contact.name}
+                                                    onChange={() => handleCheckboxChange({ id: contact.id, name: contact.name })}
+                                                />
+                                            </Form.Group>
+                                    ))}
+                                    {error && (
+                                        <Errors message={error} />
+                                    )}
+                                    <Button type="submit" id="button" className="cancel-button" onClick={closeModal3}>Cancel</Button>
+                                    <Button className="add-contact-button" type="submit">Add</Button>
+                                </Form>
+                            </Modal.Body>
+                        </>
+                    </Modal>
                 </div>
             </div>
         </div>

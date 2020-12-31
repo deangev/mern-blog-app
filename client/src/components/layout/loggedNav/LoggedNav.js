@@ -12,7 +12,7 @@ export default function LoggedNav() {
     const history = useHistory();
 
     const chat = () => history.push('/chat')
-    const files = () => history.push('/files')
+    const profile = () => history.push('/profile')
     const logout = () => {
         setUserData({
             token: undefined,
@@ -27,10 +27,10 @@ export default function LoggedNav() {
         <div className="d-flex logged-container">
             <Nav>
                 <Nav.Item>
-                    <Nav.Link className="option" onClick={chat}>Chat</Nav.Link>
+                    <Nav.Link className="option" onClick={profile}>Profile</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link className="option" onClick={files}>Files</Nav.Link>
+                    <Nav.Link className="option" onClick={chat}>Chat</Nav.Link>
                 </Nav.Item>
             </Nav>
 
