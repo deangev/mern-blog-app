@@ -7,6 +7,7 @@ import Register from './components/auth/register/Register';
 import Navbar from './components/layout/Navbar';
 import Home from './components/pages/Home'
 import Chat from './components/pages/Chat';
+import ProfileContext from './context/ProfileContext'
 import ContactsProvider from './context/ContactsContext'
 import ConversationsProvider from './context/ConversationsContext'
 import SocketProvider from './context/SocketProvider'
@@ -19,7 +20,7 @@ export default function App() {
         name: undefined,
         id: undefined
     });
-
+    const [availableFile, setAvailableFile] = useState()
     const [contacts, setContacts] = useState();
     const [conversations, setConversations] = useState();
     const [selectedConversationIndex, setSelectedConversationIndex] = useState();
@@ -65,6 +66,22 @@ export default function App() {
     }, [])
 
     useEffect(() => {
+        const getImage = async () => {
+
+            const image = await Axios.post("http://localhost:5000/images/images", {
+                userId: userData.id
+            })
+            if (image) {
+                setAvailableFile(image.data)
+            }
+        }
+        if (userData.profile && userData.profile[0]) {
+            getImage()
+        }
+    }, [userData.profile, userData.id])
+
+
+    useEffect(() => {
         const getContacts = async () => {
             let token = localStorage.getItem('auth-token');
             if (token) {
@@ -75,8 +92,6 @@ export default function App() {
                 setContacts(allContacts.data)
             }
         }
-
-
         getContacts();
     }, [userData.email, contacts])
 
@@ -109,22 +124,24 @@ export default function App() {
     return (
         <BrowserRouter>
             <UserContext.Provider value={{ userData, setUserData }}>
-                <PostsProvider.Provider value={{ posts, setPosts }}>
-                    <Navbar />
-                    <Switch>
-                        <Route exact path="/" component={Home} />
-                        <Route exact path="/login" component={Login} />
-                        <Route exact path="/register" component={Register} />
-                        <Route exact path="/profile" component={Profile} />
-                        <SocketProvider>
-                            <ContactsProvider.Provider value={{ contacts, setContacts }}>
-                                <ConversationsProvider.Provider value={conversationValue}>
-                                    <Route exact path="/chat" component={Chat} />
-                                </ConversationsProvider.Provider>
-                            </ContactsProvider.Provider>
-                        </SocketProvider>
-                    </Switch>
-                </PostsProvider.Provider>
+                <ProfileContext.Provider value={{ availableFile, setAvailableFile }}>
+                    <PostsProvider.Provider value={{ posts, setPosts }}>
+                        <Navbar />
+                        <Switch>
+                            <Route exact path="/" component={Home} />
+                            <Route exact path="/login" component={Login} />
+                            <Route exact path="/register" component={Register} />
+                            <Route exact path="/profile" component={Profile} />
+                            <SocketProvider>
+                                <ContactsProvider.Provider value={{ contacts, setContacts }}>
+                                    <ConversationsProvider.Provider value={conversationValue}>
+                                        <Route exact path="/chat" component={Chat} />
+                                    </ConversationsProvider.Provider>
+                                </ContactsProvider.Provider>
+                            </SocketProvider>
+                        </Switch>
+                    </PostsProvider.Provider>
+                </ProfileContext.Provider>
             </UserContext.Provider>
         </BrowserRouter>
     )

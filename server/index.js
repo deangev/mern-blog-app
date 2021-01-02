@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const io = require('socket.io')(5001);
-const multer = require('multer')
 require('dotenv').config();
 
 const app = express();

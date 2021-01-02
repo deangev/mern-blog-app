@@ -97,7 +97,8 @@ router.get("/", auth, async (req, res) => {
         res.json({
             name: user.firstName,
             id: user.id,
-            email: user.email
+            email: user.email,
+            profile: user.profile
         })
     } catch (err) {
         res.status(500).json({ message: err.message });

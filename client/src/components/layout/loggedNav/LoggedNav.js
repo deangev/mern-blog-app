@@ -1,14 +1,16 @@
 import React, { useContext } from 'react'
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Nav } from 'react-bootstrap'
 import './loggedNav.css'
 import * as FaIcons from "react-icons/fa";
 import * as MdIcons from "react-icons/md";
 import * as GoIcons from "react-icons/go";
-import UserContext from '../../../context/UserContext'
+import UserContext from '../../../context/UserContext';
+import ProfileContext from '../../../context/ProfileContext';
 
 export default function LoggedNav() {
     const { userData, setUserData } = useContext(UserContext);
+    const { availableFile } = useContext(ProfileContext)
     const history = useHistory();
 
     const chat = () => history.push('/chat')
@@ -35,7 +37,10 @@ export default function LoggedNav() {
             </Nav>
 
             <div className="user-info d-flex">
-                <FaIcons.FaRegUserCircle className="user-icon" />
+                {availableFile ?
+                    <img className="profile-img" src={`data:image/jpeg;base64,${availableFile}`} alt="image1" style={{ width: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
+                    <FaIcons.FaRegUserCircle className="user-icon" />
+                }
                 <h3 className="user-name">{userData.name.charAt(0).toUpperCase() + userData.name.slice(1)}</h3>
 
                 <button type="submit" className="" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><MdIcons.MdArrowDropDown className="dropdown-icon" /></button>

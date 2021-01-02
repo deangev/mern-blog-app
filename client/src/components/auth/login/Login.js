@@ -1,15 +1,16 @@
-import React, { useContext, useState } from 'react'
-import { useHistory, Link } from 'react-router-dom'
-import UserContext from '../../../context/UserContext'
-import './login.css'
-import Errors from '../../misc/Errors'
-import Axios from 'axios'
+import React, { useContext, useState } from 'react';
+import { useHistory, Link } from 'react-router-dom';
+import UserContext from '../../../context/UserContext';
+import './login.css';
+import Errors from '../../misc/Errors';
+import Axios from 'axios';
+// import ProfileContext from '../../../context/ProfileContext';
 
 export default function Login() {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [error, setError] = useState();
-
+    // const { setAvailableFile } = useContext(ProfileContext)
     const { setUserData } = useContext(UserContext)
     const history = useHistory();
 
@@ -27,6 +28,16 @@ export default function Login() {
                 id: loginRes.data.id,
                 email: loginRes.data.email
             });
+
+            // if (loginRes.data.profile.length !== 0) {
+            //     const image = await Axios.post("http://localhost:5000/images/images", {
+            //         userId: loginRes.data.id
+            //     })
+            //     if (image.data) {
+            //         setAvailableFile(image.data)
+            //     }
+            // }
+            
             localStorage.setItem('auth-token', loginRes.data.token)
             history.push('/')
         } catch (err) {

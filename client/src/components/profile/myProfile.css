@@ -1,0 +1,34 @@
+.profile-container {
+    height: 100vh;
+    width: 40rem;
+    /* background-color: red; */
+}
+
+.profile-img-container {
+    margin-top: 10rem;
+    color: #1877f2;
+}
+
+.profile-con-user-icon {
+    width: 20rem;
+    height: 20rem;
+}
+
+.form-container-profile {
+    width: 100%;
+}
+
+#update-profile-button {
+    color: #1877f2;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+#update-profile-button:hover {
+    text-decoration: underline;
+    /* display: inline-block; */
+}
+
+#files { 
+    /* display: inline-block !important;  */
+}
