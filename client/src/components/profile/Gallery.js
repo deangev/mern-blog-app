@@ -6,7 +6,7 @@ import './gallery.css'
 
 export default function Gallery() {
     const [selectedFileGallery, setSelectedFileGallery] = useState()
-    const { userData } = useContext(UserContext);
+    const { userData, setUserData } = useContext(UserContext);
 
     const singleFileUploadHandler = async (event) => {
         const data = new FormData();
@@ -21,10 +21,18 @@ export default function Gallery() {
                     'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
                 }
             })
-            // const userRes = await Axios.get(
-            //     "http://localhost:5000/users/",
-            //     { headers: { "x-auth-token": userData.token } }
-            // )
+            const userRes = await Axios.get(
+                "http://localhost:5000/users/",
+                { headers: { "x-auth-token": userData.token } }
+            )
+            setUserData({
+                token: userData.token,
+                name: userRes.data.name,
+                id: userRes.data.id,
+                email: userRes.data.email,
+                profile: userRes.data.profile,
+                gallery: userRes.data.gallery
+            })
         } else {
 
         }

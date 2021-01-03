@@ -75,11 +75,13 @@
     text-align: left;
     padding: 0;
     padding-left: 1rem;
+    
 }
 
 #dropdown-item:active {
     background-color: #e0e0e0 !important;
     color: #1877f2 !important;
+    outline: none !important;
 }
 
 #dropdown-item:hover {
