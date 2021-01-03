@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-const contactSchema = require('./contactSchema')
-const imageSchema = require('./imageModel');
+const { index } = require('./contactSchema');
+const contactSchema = require('./contactSchema');
+const profileSchema = require('./profileSchema');
 
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -28,7 +29,10 @@ const userSchema = new mongoose.Schema({
         index: true
     },
     profile: {
-        type: [imageSchema],
+        type: [profileSchema]
+    },
+    gallery: {
+        type: [Object],
         index: true
     }
 })

@@ -1,34 +1,39 @@
 .profile-container {
     height: 100vh;
-    width: 40rem;
-    /* background-color: red; */
+    width: 50rem;
+    
+    /* border-right: 1px solid black; */
 }
 
 .profile-img-container {
-    margin-top: 10rem;
+    margin-top: 12rem;
     color: #1877f2;
-}
-
-.profile-con-user-icon {
-    width: 20rem;
-    height: 20rem;
-}
-
-.form-container-profile {
-    width: 100%;
 }
 
 #update-profile-button {
     color: #1877f2;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 500;
+    position: relative;
+    
 }
 
-#update-profile-button:hover {
+#update-profile-button:hover, #upload-profile-button:hover {
     text-decoration: underline;
-    /* display: inline-block; */
 }
 
-#files { 
-    /* display: inline-block !important;  */
+#max-file-size {
+    position: relative;
+    bottom: 2.5rem;
 }
+
+#upload-profile-button {
+    color: #1877f2;
+    font-size: 1.4rem;
+    font-weight: 500;
+    position: relative;
+    bottom: 3rem;
+    outline: none !important;
+    border: 0 !important;
+}
+

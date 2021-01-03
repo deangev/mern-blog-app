@@ -8,11 +8,11 @@ import Axios from 'axios';
 import './posts.css';
 
 export default function Posts() {
-    const { posts } = useContext(PostsProvider)
-    const { userData } = useContext(UserContext)
     const [commentInput, setCommentInput] = useState()
     const [inputIndex, setInputIndex] = useState()
     const [showCommentsIndex, setShowCommentsIndex] = useState()
+    const { posts } = useContext(PostsProvider)
+    const { userData } = useContext(UserContext)
 
     const handleClick = async (e) => {
         try {
@@ -48,6 +48,7 @@ export default function Posts() {
         }
     }
 
+    // console.log(posts);
     return (
         <div className="posts-container">
             <br /><br /><br /><br /><br /><br /><br />
@@ -55,7 +56,10 @@ export default function Posts() {
                 return (
                     <Card key={index}>
                         <Card.Body className="card-component" style={{ position: 'relative' }}>
-                            <FaIcons.FaRegUserCircle className="user-icon-post" />
+                            {post.publisher.profile ?
+                                <img className="profile-img" src={post.publisher.profile} alt="image1" style={{ cursor: 'pointer', width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
+                                <FaIcons.FaRegUserCircle className="user-icon-post" />
+                            }
                             <Card.Title>{`${post.publisher.firstName.charAt(0).toUpperCase() + post.publisher.firstName.slice(1)} ${post.publisher.lastName.charAt(0).toUpperCase() + post.publisher.lastName.slice(1)}`}</Card.Title>
                             <Card.Subtitle id="time" className="mb-2 text-muted">{post.date}</Card.Subtitle>
                             <Card.Text id="content">{post.content}</Card.Text>
@@ -73,7 +77,10 @@ export default function Posts() {
                                     {post.comments[0] &&
                                         <div className="single-comment">
                                             <div className="commenter-user-icon-container">
-                                                <FaIcons.FaRegUserCircle className="comment-user-icon user-icon-post" />
+                                                {post.comments[0].profile ?
+                                                    <img className="profile-img" src={post.comments[0].profile} alt="image1" style={{ cursor: 'pointer', width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
+                                                    <FaIcons.FaRegUserCircle className="user-icon-post" />
+                                                }
                                             </div>
                                             <div className="comment-content-name">
                                                 <div className="commenter-name">
@@ -88,7 +95,10 @@ export default function Posts() {
                                     {post.comments[1] &&
                                         <div className="single-comment">
                                             <div className="commenter-user-icon-container">
-                                                <FaIcons.FaRegUserCircle className="comment-user-icon user-icon-post" />
+                                                {post.comments[1].profile ?
+                                                    <img className="profile-img" src={post.comments[1].profile} alt="image1" style={{ cursor: 'pointer', width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
+                                                    <FaIcons.FaRegUserCircle className="user-icon-post" />
+                                                }
                                             </div>
                                             <div className="comment-content-name">
                                                 <div className="commenter-name">
@@ -108,7 +118,7 @@ export default function Posts() {
                                             View {post.comments.length - 2} more {post.comments.length === 3 ? 'comment' : 'comments'}
                                         </div>
                                         :
-                                        <div className="more-comments" style={{display: 'none'}}></div>
+                                        <div className="more-comments" style={{ display: 'none' }}></div>
                                     }
                                     {
                                         posts[showCommentsIndex] && posts[showCommentsIndex] === post &&
@@ -118,7 +128,10 @@ export default function Posts() {
                                                 &&
                                                 <div className="single-comment" key={index}>
                                                     <div className="commenter-user-icon-container">
-                                                        <FaIcons.FaRegUserCircle className="comment-user-icon user-icon-post" />
+                                                        {comment.profile ?
+                                                            <img className="profile-img" src={comment.profile} alt="image1" style={{ cursor: 'pointer', width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
+                                                            <FaIcons.FaRegUserCircle className="user-icon-post" />
+                                                        }
                                                     </div>
                                                     <div className="comment-content-name">
                                                         <div className="commenter-name">
@@ -149,7 +162,7 @@ export default function Posts() {
                                                     placeholder="Write a comment"
                                                 />
                                                 <InputGroup.Append>
-                                                    <Button type="submit" id="comment-button" onFocus={() => setInputIndex(index)} onClick={publishComment}  value={post._id} index={index}>Comment</Button>
+                                                    <Button type="submit" id="comment-button" onFocus={() => setInputIndex(index)} onClick={publishComment} value={post._id} index={index}>Comment</Button>
                                                 </InputGroup.Append>
                                             </InputGroup>
                                         </Form.Group>

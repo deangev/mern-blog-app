@@ -17,7 +17,8 @@ router.post("/post", async (req, res) => {
             publisher: {
                 id: publisher._id,
                 firstName: publisher.firstName,
-                lastName: publisher.lastName
+                lastName: publisher.lastName,
+                profile: publisher.profile[0] && publisher.profile[0].imgURL
             },
             content: content,
             date: date
@@ -28,7 +29,7 @@ router.post("/post", async (req, res) => {
         res.json(newPost)
 
     } catch (err) {
-        res.status(500).json({ message: "Id not found" })
+        res.status(500).json({ message: err.message })
     }
 })
 
@@ -65,8 +66,8 @@ router.post('/like', async (req, res) => {
 router.post('/comment', async (req, res) => {
     try {
         const { commenterId, postContent, postId } = req.body;
-        const commentedPost = await Post.findById(postId);
         const commenter = await User.findById(commenterId);
+        console.log(commenter);
 
         const newPost = await Post.findOneAndUpdate({_id: postId}, {
             $push: {
@@ -74,7 +75,8 @@ router.post('/comment', async (req, res) => {
                     id: commenter._id,
                     firstName: commenter.firstName,
                     lastName: commenter.lastName,
-                    content: postContent
+                    content: postContent,
+                    profile: commenter.profile[0] && commenter.profile[0].imgURL
                 }
             }
         })

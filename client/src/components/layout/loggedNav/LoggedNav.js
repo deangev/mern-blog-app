@@ -38,8 +38,8 @@ export default function LoggedNav() {
 
             <div className="user-info d-flex">
                 {availableFile ?
-                    <img className="profile-img" src={`data:image/jpeg;base64,${availableFile}`} alt="image1" style={{ width: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
-                    <FaIcons.FaRegUserCircle className="user-icon" />
+                    <img className="profile-img-nav profile-img" onClick={profile} src={availableFile.imgURL} alt="image1" style={{cursor: 'pointer',  width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
+                    <FaIcons.FaRegUserCircle className="user-icon" onClick={profile} style={{cursor: 'pointer'}}/>
                 }
                 <h3 className="user-name">{userData.name.charAt(0).toUpperCase() + userData.name.slice(1)}</h3>
 

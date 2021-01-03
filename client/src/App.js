@@ -57,29 +57,16 @@ export default function App() {
                     token,
                     name: userRes.data.name,
                     id: userRes.data.id,
-                    email: userRes.data.email
+                    email: userRes.data.email,
+                    profile: userRes.data.profile,
+                    gallery: userRes.data.gallery
                 })
+                setAvailableFile(userData.profile)
             }
         }
 
         checkLoggedIn()
-    }, [])
-
-    useEffect(() => {
-        const getImage = async () => {
-
-            const image = await Axios.post("http://localhost:5000/images/images", {
-                userId: userData.id
-            })
-            if (image) {
-                setAvailableFile(image.data)
-            }
-        }
-        if (userData.profile && userData.profile[0]) {
-            getImage()
-        }
-    }, [userData.profile, userData.id])
-
+    }, [userData.profile])
 
     useEffect(() => {
         const getContacts = async () => {

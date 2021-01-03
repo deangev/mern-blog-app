@@ -1,50 +1,55 @@
+import React, { useContext, useState } from 'react'
 import Axios from 'axios';
-import React, { useState, useContext } from 'react';
-import ProfileContext from '../../context/ProfileContext';
 import UserContext from '../../context/UserContext';
-import './myProfile.css';
 import * as FaIcons from "react-icons/fa";
+import ProfileContext from '../../context/ProfileContext';
+import './myProfile.css';
 
 export default function MyProfile() {
-    const [file, setFile] = useState()
+    const [selectedFile, setSelectedFile] = useState()
+    const { userData } = useContext(UserContext);
     const { availableFile, setAvailableFile } = useContext(ProfileContext)
-    const { userData } = useContext(UserContext)
 
-    const uploadImage = async (e) => {
-        e.preventDefault()
-        const data = new FormData()
-        data.append("file", file);
-        data.append("userId", userData.id)
-        await Axios.post("http://localhost:5000/images/upload", data)
-        const image = await Axios.post("http://localhost:5000/images/images", {
-            userId: userData.id
-        })
-        setAvailableFile(image.data)
-    }
+    const singleFileUploadHandler = async (event) => {
+        const data = new FormData();
+        // If file selected
+        if (selectedFile) {
+            data.append('profileImage', selectedFile, selectedFile.name);
+            data.append("userId", userData.id)
+            await Axios.post('http://localhost:5000/images/profile-img-upload', data, {
+                headers: {
+                    'accept': 'application/json',
+                    'Accept-Language': 'en-US,en;q=0.8',
+                    'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+                }
+            })
+            const userRes = await Axios.get(
+                "http://localhost:5000/users/",
+                { headers: { "x-auth-token": userData.token } }
+            )
+            setAvailableFile(userRes.data.profile);
+        } else {
+
+        }
+    };
 
     return (
-        <div className="profile-container ">
+        <div className="profile-container">
             <div className="profile-img-container d-flex justify-content-center">
                 {availableFile ?
-                    <img className="profile-img" src={`data:image/jpeg;base64,${availableFile}`} alt="image1" style={{ width: '20rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
-                    <FaIcons.FaRegUserCircle className="profile-con-user-icon" />
-                }
+                    <img className="profile-img" src={availableFile.imgURL} alt="image1" style={{ width: '20rem', height: '20rem', borderRadius: '50%' }}></img> :
+                    <FaIcons.FaRegUserCircle className="user-icon" style={{ width: '20rem', height: '20rem', borderRadius: '50%' }} />
+                }            
             </div>
-            <form className="form-container-profile" style={{}}>
-                <label htmlFor="file" className="btn d-flex justify-content-center" id="update-profile-button">Update profile picture</label>
-                <input id="file" accept="image/*" style={{ visibility: "hidden" }} type="file" onChange={event => {
-                    setFile(event.target.files[0])
-                }} />
-                <button onClick={uploadImage}>Upload</button>
-            </form>
+
+            <div className="card-body d-flex justify-content-center flex-column">
+                <label htmlFor="file" className="btn" id="update-profile-button" >Update profile picture</label>
+                <input type="file" accept="image/*" style={{ visibility: "hidden" }} id="file" onChange={e => setSelectedFile(e.target.files[0])} />
+                <p className="text-muted" id="max-file-size" style={{ textAlign: 'center' }}>( Max 5MB )</p>
+                <div className="asd d-flex justify-content-center" style={{outline: 'none'}}>
+                    <button className="btn shadow-none text-success" id="upload-profile-button" onClick={singleFileUploadHandler}>Upload</button>
+                </div>
+            </div>
         </div>
     )
 }
-
-// {/* <input type="file" id="file" accept="image/*" onChange={event => {
-    //     setFile(event.target.files[0])
-// }} /> */}
-
-// {/* <input type="file" id="file" accept="image/*" onChange={event => {
-    //     setFile(event.target.files[0])
-// }} /> */}
