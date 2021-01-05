@@ -20,7 +20,7 @@ const profileImgUpload = multer({
             cb(null, path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname))
         }
     }),
-    limits: { fileSize: 5000000 }, // In bytes: 5000000 bytes = 5 MB
+    limits: { fileSize: 2000000 }, // In bytes: 5000000 bytes = 5 MB
 
 }).single('profileImage');
 

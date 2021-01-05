@@ -19,10 +19,14 @@ export default function LoggedNav() {
         setUserData({
             token: undefined,
             name: undefined,
-            id: undefined
+            id: undefined,
+            email: undefined,
+            profile: undefined,
+            gallery: undefined
         })
         localStorage.setItem('auth-token', '')
         history.push('/')
+        // location.reload()
     }
 
     return (

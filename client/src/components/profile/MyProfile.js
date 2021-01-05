@@ -47,7 +47,7 @@ export default function MyProfile() {
                 <input type="file" accept="image/*" style={{ visibility: "hidden" }} id="file" onChange={e => setSelectedFile(e.target.files[0])} />
                 <p className="text-muted" id="max-file-size" style={{ textAlign: 'center' }}>( Max 5MB )</p>
                 <div className="asd d-flex justify-content-center" style={{outline: 'none'}}>
-                    <button className="btn shadow-none text-success" id="upload-profile-button" onClick={singleFileUploadHandler}>Upload</button>
+                    <button className={`btn shadow-none ${selectedFile && selectedFile.size > 2000000 ? 'oversize-image': 'upload-button-gallery'}`} id="upload-profile-button" onClick={singleFileUploadHandler}>Upload</button>
                 </div>
             </div>
         </div>

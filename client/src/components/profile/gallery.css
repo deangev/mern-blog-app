@@ -9,10 +9,12 @@
     background-color: white;
     margin: 0 auto;
     margin-top: 10rem;
+    margin-bottom: 3rem !important;
     width: 95%;
-    height: auto !important;
+    min-height: 80%;
     border-radius: .8rem;
     position: relative;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .gallery-wrapper h2 {
@@ -45,22 +47,29 @@
 
 .upload-button-gallery-w {
     position: absolute;
-    right: 3rem;
+    right: 2.8rem;
     top: 5.8rem;
 }
 
 .upload-button-gallery {
     font-size: 1.7rem !important;
     font-weight: 500 !important;
+    color: #51ab4b !important;
 }
 
 .upload-button-gallery:hover, #upload-photo:hover {
     text-decoration: underline !important;
 }
 
+.oversize-image {
+    font-size: 1.7rem !important;
+    color: red !important;
+    text-decoration: none !important;
+    cursor: not-allowed !important;
+}
+
 .photo-wrapper {
     display: inline-block;
-
 }
 
 .photo {
@@ -68,4 +77,25 @@
     height: 25rem;
     width: 25rem;
     border-radius: 1rem;
+}
+
+@media only screen  and (max-width: 630px) {
+
+    .gallery-container {
+        width: 100%;
+        position: absolute;
+        top: 80vh;
+        background-color: #f0f2f5;
+    }
+
+    .gallery-wrapper {
+        margin-top: 2rem;
+        margin-bottom: 0;
+    }
+
+    .photo-wrapper {
+        margin: 0 auto;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
 }

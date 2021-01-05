@@ -202,7 +202,7 @@ export default function OpenConversation() {
                     {selectedConversation && selectedConversation[0].messages.map((message, index) => {
                         const lastMessage = selectedConversation && selectedConversation[0].messages.length - 1 === index
                         return (
-                            <div ref={lastMessage ? setRef : null} key={index} className={`text-message my-1 d-flex flex-column ${message.fromMe ? 'align-self-end' : 'align-self-start'}`}>
+                            <div ref={lastMessage ? setRef : null} key={index} className={`text-message  d-flex flex-column ${message.fromMe ? 'align-self-end' : 'align-self-start'}`}>
                                 <div className={`rounded px-2 py-1 ${message.fromMe ? 'bg-primary text-white' : 'border'}`}>{message.content}</div>
                                 <div className={`text-mutes small ${message.fromMe ? 'text-right' : ''}`}>{message.fromMe ? 'You' : message.senderName}</div>
                             </div>

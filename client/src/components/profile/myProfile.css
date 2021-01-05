@@ -37,3 +37,26 @@
     border: 0 !important;
 }
 
+@media only screen  and (max-width: 630px) {
+    .profile-container {
+        width: 100vw;
+    }
+
+    .profile-img-container {
+        height: 20rem;
+    }
+
+    .profile-img-container .user-icon, .profile-img-container .img-profile {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        margin-left: 50% !important;
+        transform: translateX(-50%);
+    }
+
+    .card-body {
+        margin: 0;
+        padding-right: 0 !important;
+    
+    }
+}

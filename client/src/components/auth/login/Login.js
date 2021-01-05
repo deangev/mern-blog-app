@@ -4,13 +4,11 @@ import UserContext from '../../../context/UserContext';
 import './login.css';
 import Errors from '../../misc/Errors';
 import Axios from 'axios';
-// import ProfileContext from '../../../context/ProfileContext';
 
 export default function Login() {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [error, setError] = useState();
-    // const { setAvailableFile } = useContext(ProfileContext)
     const { setUserData } = useContext(UserContext)
     const history = useHistory();
 
@@ -26,18 +24,11 @@ export default function Login() {
                 token: loginRes.data.token,
                 name: loginRes.data.name,
                 id: loginRes.data.id,
-                email: loginRes.data.email
+                email: loginRes.data.email,
+                profile: loginRes.data.profile,
+                gallery: loginRes.data.gallery
             });
 
-            // if (loginRes.data.profile.length !== 0) {
-            //     const image = await Axios.post("http://localhost:5000/images/images", {
-            //         userId: loginRes.data.id
-            //     })
-            //     if (image.data) {
-            //         setAvailableFile(image.data)
-            //     }
-            // }
-            
             localStorage.setItem('auth-token', loginRes.data.token)
             history.push('/')
         } catch (err) {
