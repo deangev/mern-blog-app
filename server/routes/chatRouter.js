@@ -98,7 +98,6 @@ router.get('/get-conversations', auth, async (req, res) => {
                 id: a._id,
                 name: a.name,
                 contacts: a.contacts.map(contact => contact),
-                // contacts: a.contacts.map(contact => contact.name),
                 messages: a.messages
             }
         })

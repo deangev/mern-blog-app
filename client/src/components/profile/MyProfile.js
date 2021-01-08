@@ -28,6 +28,7 @@ export default function MyProfile() {
                 { headers: { "x-auth-token": userData.token } }
             )
             setAvailableFile(userRes.data.profile);
+            setSelectedFile()
         } else {
 
         }
@@ -45,10 +46,25 @@ export default function MyProfile() {
             <div className="card-body d-flex justify-content-center flex-column">
                 <label htmlFor="file" className="btn" id="update-profile-button" >Update profile picture</label>
                 <input type="file" accept="image/*" style={{ visibility: "hidden" }} id="file" onChange={e => setSelectedFile(e.target.files[0])} />
-                <p className="text-muted" id="max-file-size" style={{ textAlign: 'center' }}>( Max 5MB )</p>
-                <div className="asd d-flex justify-content-center" style={{outline: 'none'}}>
+                <p className="text-muted" id="max-file-size" style={{ textAlign: 'center' }}>( Max 2MB )</p>
+                {selectedFile &&
+                    <div className="image-info-profile">
+                        <p>{selectedFile && selectedFile.name}</p>
+                        <p className={`${selectedFile && selectedFile.size < 2000000 && 'text-success'}`} style={{color: 'red'}}>{selectedFile && (selectedFile.size) / 1000000} MB</p>
+                        <div className="upload-button-gallery-w" style={{ outline: 'none' }}>
+                            <button
+                                className={`btn shadow-none ${selectedFile && selectedFile.size > 2000000 ? 'oversize-image' : 'upload-button-gallery'}`}
+                                onClick={singleFileUploadHandler}
+                                
+                            >
+                                Upload
+                            </button>
+                        </div>
+                    </div>
+                }
+                {/* <div className="asd d-flex justify-content-center" style={{outline: 'none'}}>
                     <button className={`btn shadow-none ${selectedFile && selectedFile.size > 2000000 ? 'oversize-image': 'upload-button-gallery'}`} id="upload-profile-button" onClick={singleFileUploadHandler}>Upload</button>
-                </div>
+                </div> */}
             </div>
         </div>
     )

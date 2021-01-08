@@ -16,6 +16,7 @@ export default function LoggedNav() {
     const chat = () => history.push('/chat')
     const profile = () => history.push('/profile')
     const logout = () => {
+        localStorage.setItem('auth-token', '')
         setUserData({
             token: undefined,
             name: undefined,
@@ -24,9 +25,7 @@ export default function LoggedNav() {
             profile: undefined,
             gallery: undefined
         })
-        localStorage.setItem('auth-token', '')
         history.push('/')
-        // location.reload()
     }
 
     return (

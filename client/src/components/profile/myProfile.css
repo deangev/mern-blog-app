@@ -1,8 +1,6 @@
 .profile-container {
     height: 100vh;
     width: 50rem;
-    
-    /* border-right: 1px solid black; */
 }
 
 .profile-img-container {
@@ -35,6 +33,11 @@
     bottom: 3rem;
     outline: none !important;
     border: 0 !important;
+}
+
+.image-info-profile {
+    text-align: center;
+    font-size: 1.5rem;
 }
 
 @media only screen  and (max-width: 630px) {

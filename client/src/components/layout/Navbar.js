@@ -8,12 +8,13 @@ import LoggedNav from './loggedNav/LoggedNav';
 
 export default function Navbar() {
     const { userData } = useContext(UserContext);
+    let token = localStorage.getItem('auth-token')
 
 
     return (
         <div className="navbar-container" style={{ margin: 0 }}>
             <Link to="/"><span className="home-icon d-flex justify-self-center"><io.IoMdHome className="icon" /></span></Link>
-            {userData.name ?
+            {token && userData.name ?
                 <LoggedNav /> :
                 <UnLoggedNav />
             }

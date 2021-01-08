@@ -32,11 +32,13 @@ export default function Gallery() {
                 profile: userRes.data.profile,
                 gallery: userRes.data.gallery
             })
+            setSelectedFileGallery()
         } else {
 
         }
     };
 
+    // console.log(selectedFileGallery);
 
     return (
         <div className="gallery-container ">
@@ -46,15 +48,21 @@ export default function Gallery() {
                 <input type="file" accept="image/*" id="filess" style={{ visibility: 'hidden' }} onChange={e => {
                     setSelectedFileGallery(e.target.files[0])
                 }} />
-                <p className="text-muted" id="max-file-size-1" style={{ textAlign: 'center', display: 'inline-block' }}>( Max 5MB )</p>
-                <div className="upload-button-gallery-w" style={{ outline: 'none' }}>
-                    <button
-                        className={`btn shadow-none ${selectedFileGallery && selectedFileGallery.size > 2000000 ? 'oversize-image': 'upload-button-gallery'}`}
-                        onClick={singleFileUploadHandler}
-                    >
-                        Upload
-                    </button>
-                </div>
+                <p className="text-muted" id="max-file-size-1" style={{ textAlign: 'center', display: 'inline-block' }}>( Max 2MB )</p>
+                {selectedFileGallery &&
+                    <div className="image-info">
+                        <p>{selectedFileGallery && selectedFileGallery.name}</p>
+                        <p className={`${selectedFileGallery && selectedFileGallery.size < 2000000 && 'text-success'}`} style={{color: 'red'}}>{selectedFileGallery && (selectedFileGallery.size) / 1000000} MB</p>
+                        <div className="upload-button-gallery-w" style={{ outline: 'none' }}>
+                            <button
+                                className={`btn shadow-none ${selectedFileGallery && selectedFileGallery.size > 2000000 ? 'oversize-image' : 'upload-button-gallery'}`}
+                                onClick={singleFileUploadHandler}
+                            >
+                                Upload
+                            </button>
+                        </div>
+                    </div>
+                }
                 <span style={{ height: '12rem', width: '100%' }} className='d-flex'></span>
                 {userData.gallery && userData.gallery.map((gallery, index) => {
                     return (

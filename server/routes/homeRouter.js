@@ -1,7 +1,7 @@
 const router = require('express').Router();
-// const auth = require('../middleware/auth')
 const Post = require('../modelsAndSchemas/postModel');
 const User = require('../modelsAndSchemas/userModel');
+const mongoose = require('mongoose');
 
 router.post("/post", async (req, res) => {
     try {
@@ -12,6 +12,7 @@ router.post("/post", async (req, res) => {
         const publisher = await User.findById(publisherId)
         if (!publisher)
             return res.status(400).json({ message: "You are not logged in." });
+
 
         const newPost = new Post({
             publisher: {
@@ -67,11 +68,12 @@ router.post('/comment', async (req, res) => {
     try {
         const { commenterId, postContent, postId } = req.body;
         const commenter = await User.findById(commenterId);
-        console.log(commenter);
+        const newId2 = new mongoose.Types.ObjectId()
 
-        const newPost = await Post.findOneAndUpdate({_id: postId}, {
+        const newPost = await Post.findOneAndUpdate({ _id: postId }, {
             $push: {
                 comments: {
+                    _id: newId2,
                     id: commenter._id,
                     firstName: commenter.firstName,
                     lastName: commenter.lastName,
@@ -82,7 +84,7 @@ router.post('/comment', async (req, res) => {
         })
 
         res.json(newPost)
-        
+
     } catch (err) {
         res.status(500).json({ message: err.message })
     }

@@ -3,6 +3,7 @@ const User = require('../modelsAndSchemas/userModel')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const auth = require('../middleware/auth')
+const mongoose = require('mongoose');
 
 router.post('/register', async (req, res) => {
     try {
@@ -46,11 +47,11 @@ router.post('/login', async (req, res) => {
 
         const user = await User.findOne({ email: email })
         if (!user)
-            return res.status(400).json({ message: "No account with this email has been found" })
+            return res.status(400).json({ message: "Please provide a valid username and password" })
 
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch)
-            return res.status(400).json({ message: "Wrong password, please try again!" })
+            return res.status(400).json({ message: "Please provide a valid username and password" })
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
         res.json({
@@ -98,8 +99,25 @@ router.get("/", auth, async (req, res) => {
         const user = await User.findById(req.user);
         res.json({
             name: user.firstName,
+            lastName: user.lastName,
             id: user.id,
             email: user.email,
+            profile: user.profile[0],
+            gallery: user.gallery
+        })
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+})
+
+router.post("/getProfile", async (req, res) => {
+    try {
+        let { userId } = req.body;
+        var id = mongoose.Types.ObjectId(userId);
+        const user = await User.findById(id)
+        res.json({
+            firstName: user.firstName,
+            lastName: user.lastName,
             profile: user.profile[0],
             gallery: user.gallery
         })
