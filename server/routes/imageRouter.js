@@ -7,8 +7,8 @@ const User = require('../modelsAndSchemas/userModel');
 const Post = require('../modelsAndSchemas/postModel')
 
 const s3 = new aws.S3({
-    accessKeyId: 'AKIAUKCQJQEPJ3E6F5GN',
-    secretAccessKey: '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',
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
     Bucket: 'mernupload'
 });
 
