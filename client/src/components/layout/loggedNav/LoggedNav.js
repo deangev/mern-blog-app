@@ -20,6 +20,7 @@ export default function LoggedNav() {
         setUserData({
             token: undefined,
             name: undefined,
+            lastName: undefined,
             id: undefined,
             email: undefined,
             profile: undefined,

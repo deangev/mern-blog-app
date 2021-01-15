@@ -1,1 +1,1 @@
-                "https://mern-chat-posts.herokuapp.com/users/login",
+https://mern-chat-posts.herokuapp.com

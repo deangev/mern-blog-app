@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import React, { useContext, useState } from 'react';
 import UserContext from '../../context/UserContext';
+import { url } from '../../context/urlProvider'
 import './gallery.css'
 
 export default function Gallery() {
@@ -13,7 +14,7 @@ export default function Gallery() {
         if (selectedFileGallery) {
             data.append('profileImage', selectedFileGallery, selectedFileGallery.name);
             data.append("userId", userData.id)
-            await Axios.post('http://localhost:5000/images/gallery-img-upload', data, {
+            await Axios.post(`${url}/images/gallery-img-upload`, data, {
                 headers: {
                     'accept': 'application/json',
                     'Accept-Language': 'en-US,en;q=0.8',
@@ -21,7 +22,7 @@ export default function Gallery() {
                 }
             })
             const userRes = await Axios.get(
-                "http://localhost:5000/users/",
+                `${url}/users/`,
                 { headers: { "x-auth-token": userData.token } }
             )
             setUserData({
@@ -38,8 +39,6 @@ export default function Gallery() {
         }
     };
 
-    // console.log(selectedFileGallery);
-
     return (
         <div className="gallery-container ">
             <div className="gallery-wrapper">
@@ -52,7 +51,7 @@ export default function Gallery() {
                 {selectedFileGallery &&
                     <div className="image-info">
                         <p>{selectedFileGallery && selectedFileGallery.name}</p>
-                        <p className={`${selectedFileGallery && selectedFileGallery.size < 2000000 && 'text-success'}`} style={{color: 'red'}}>{selectedFileGallery && (selectedFileGallery.size) / 1000000} MB</p>
+                        <p className={`${selectedFileGallery && selectedFileGallery.size < 2000000 && 'text-success'}`} style={{ color: 'red' }}>{selectedFileGallery && (selectedFileGallery.size) / 1000000} MB</p>
                         <div className="upload-button-gallery-w" style={{ outline: 'none' }}>
                             <button
                                 className={`btn shadow-none ${selectedFileGallery && selectedFileGallery.size > 2000000 ? 'oversize-image' : 'upload-button-gallery'}`}

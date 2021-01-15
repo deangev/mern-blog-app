@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import { useContext } from 'react';
-import { Button, Card, Form, InputGroup } from 'react-bootstrap';
+import { Button, Card, Form, InputGroup, Modal } from 'react-bootstrap';
 import * as FaIcons from "react-icons/fa";
 import PostsProvider from '../../context/PostsProvider';
 import UserContext from '../../context/UserContext';
+import { url } from '../../context/urlProvider'
 import Axios from 'axios';
 import './posts.css';
 
 export default function Posts() {
-    const [commentInput, setCommentInput] = useState()
-    const [inputIndex, setInputIndex] = useState()
-    const [showCommentsIndex, setShowCommentsIndex] = useState()
-    const { posts } = useContext(PostsProvider)
-    const { userData } = useContext(UserContext)
+    const [commentInput, setCommentInput] = useState();
+    const [inputIndex, setInputIndex] = useState();
+    const [showCommentsIndex, setShowCommentsIndex] = useState();
+    const { posts } = useContext(PostsProvider);
+    const { userData } = useContext(UserContext);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [profileModal, setProfileModal] = useState();
 
     const handleClick = async (e) => {
         try {
             await Axios.post(
-                "http://localhost:5000/home/like",
+                `${url}/home/like`,
                 {
                     userId: userData.id,
                     postId: e.currentTarget.value
@@ -33,7 +36,7 @@ export default function Posts() {
             e.preventDefault()
             if (commentInput !== '') {
                 await Axios.post(
-                    "http://localhost:5000/home/comment",
+                    `${url}/home/comment`,
                     {
                         commenterId: userData.id,
                         postContent: commentInput,
@@ -48,7 +51,24 @@ export default function Posts() {
         }
     }
 
-    // console.log(posts);
+    const showProfile = async (index) => {
+        try {
+            const userProfile = await Axios.post(
+                `${url}/users/getProfile`, {
+                userId: index
+            }
+            )
+            setProfileModal(userProfile.data)
+            setModalOpen(true)
+        } catch (err) {
+            throw err
+        }
+    }
+
+    function closeModal() {
+        setModalOpen(false)
+    }
+
     return (
         <div className="posts-container">
             <br /><br /><br /><br /><br /><br /><br />
@@ -57,8 +77,8 @@ export default function Posts() {
                     <Card key={index}>
                         <Card.Body className="card-component" style={{ position: 'relative' }}>
                             {post.publisher.profile ?
-                                <img className="profile-img" src={post.publisher.profile} alt="image1" style={{ cursor: 'pointer', width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
-                                <FaIcons.FaRegUserCircle className="user-icon-post" />
+                                <img className="profile-img" onClick={() => showProfile(post.publisher.id)} src={post.publisher.profile} alt="image1" style={{ cursor: 'pointer', width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
+                                <FaIcons.FaRegUserCircle className="user-icon-post" onClick={() => showProfile(post.publisher.id)} />
                             }
                             <Card.Title>{`${post.publisher.firstName.charAt(0).toUpperCase() + post.publisher.firstName.slice(1)} ${post.publisher.lastName.charAt(0).toUpperCase() + post.publisher.lastName.slice(1)}`}</Card.Title>
                             <Card.Subtitle id="time" className="mb-2 text-muted">{post.date}</Card.Subtitle>
@@ -78,8 +98,8 @@ export default function Posts() {
                                         <div className="single-comment">
                                             <div className="commenter-user-icon-container">
                                                 {post.comments[0].profile ?
-                                                    <img className="profile-img" src={post.comments[0].profile} alt="image1" style={{ cursor: 'pointer', width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
-                                                    <FaIcons.FaRegUserCircle className="user-icon-post" />
+                                                    <img className="profile-img" src={post.comments[0].profile} onClick={() => showProfile(post.comments[0].id)} alt="image1" style={{ cursor: 'pointer', width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
+                                                    <FaIcons.FaRegUserCircle className="user-icon-post" onClick={() => showProfile(post.comments[0].id)} />
                                                 }
                                             </div>
                                             <div className="comment-content-name">
@@ -96,8 +116,8 @@ export default function Posts() {
                                         <div className="single-comment">
                                             <div className="commenter-user-icon-container">
                                                 {post.comments[1].profile ?
-                                                    <img className="profile-img" src={post.comments[1].profile} alt="image1" style={{ cursor: 'pointer', width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
-                                                    <FaIcons.FaRegUserCircle className="user-icon-post" />
+                                                    <img className="profile-img" src={post.comments[1].profile} onClick={() => showProfile(post.comments[1].id)} alt="image1" style={{ cursor: 'pointer', width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
+                                                    <FaIcons.FaRegUserCircle className="user-icon-post" onClick={() => showProfile(post.comments[1].id)} />
                                                 }
                                             </div>
                                             <div className="comment-content-name">
@@ -110,7 +130,7 @@ export default function Posts() {
                                             </div>
                                         </div>
                                     }
-                                    {post.comments.length > 2 ?
+                                    {(showCommentsIndex !== index) && post.comments.length > 2 ?
                                         <div className="more-comments" onClick={() => {
                                             setShowCommentsIndex(index)
                                             document.querySelectorAll('.more-comments')[index].style.display = 'none'
@@ -129,8 +149,8 @@ export default function Posts() {
                                                 <div className="single-comment" key={index}>
                                                     <div className="commenter-user-icon-container">
                                                         {comment.profile ?
-                                                            <img className="profile-img" src={comment.profile} alt="image1" style={{ cursor: 'pointer', width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
-                                                            <FaIcons.FaRegUserCircle className="user-icon-post" />
+                                                            <img className="profile-img" src={comment.profile} onClick={() => showProfile(post.comments[index].id)} alt="image1" style={{ cursor: 'pointer', width: '4rem', height: '4rem', marginRight: '2rem', borderRadius: '50%' }}></img> :
+                                                            <FaIcons.FaRegUserCircle className="user-icon-post" onClick={() => showProfile(post.comments[index].id)} />
                                                         }
                                                     </div>
                                                     <div className="comment-content-name">
@@ -170,6 +190,42 @@ export default function Posts() {
                                 </div>
                             </div>
                         </Card.Body>
+                        <Modal className="profile-modal" show={modalOpen} onHide={closeModal}>
+                            <>
+                                <Modal.Body className="profile-modal-body">
+                                    {profileModal &&
+                                        <div>
+                                            <div className="border-bottom">
+                                                <div className="profile-modal-img-container">
+                                                    {profileModal.profile ?
+                                                        <img className="profile-modal-img" src={profileModal.profile.imgURL && profileModal.profile.imgURL} alt="image1"></img> :
+                                                        <FaIcons.FaRegUserCircle className="profile-modal-img" style={{width: '8rem', height: '8rem', color: '#1877f2'}}/>
+                                                    }
+                                                </div>
+                                                <div className="profile-modal-name-container">
+                                                    <h2>{profileModal.firstName.charAt(0).toUpperCase()}{profileModal.firstName.slice(1)} {profileModal.lastName.charAt(0).toUpperCase()}{profileModal.lastName.slice(1)}</h2>
+                                                </div>
+                                            </div>
+                                            <div className="profile-modal-gallery-container text-muted">
+                                                {profileModal.gallery.length > 0 ?
+                                                    <div>
+                                                        <h1 style={{ color: 'black', fontSize: '2rem', marginBottom: '4rem' }}>Gallery</h1>
+                                                        {profileModal.gallery.map((photo, index) => {
+                                                            return (
+                                                                <img key={index} className="profile-modal-gallery-img" src={photo.imgURL} alt="image1"></img>
+                                                            )
+                                                        })}
+                                                    </div> :
+                                                    <div style={{ textAlign: 'center' }}>
+                                                        {`${profileModal.firstName.charAt(0).toUpperCase()}${profileModal.firstName.slice(1)} ${profileModal.lastName.charAt(0).toUpperCase()}${profileModal.lastName.slice(1)}'s gallery is empty`}
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </Modal.Body>
+                            </>
+                        </Modal>
                     </Card>
                 )
             })}

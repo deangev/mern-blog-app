@@ -5,6 +5,7 @@ import { Button, Form } from 'react-bootstrap';
 import Axios from 'axios';
 import Errors from '../misc/Errors';
 import './postInput.css';
+import { url } from '../../context/urlProvider'
 
 export default function PostInput() {
     const [text, setText] = useState('');
@@ -21,7 +22,7 @@ export default function PostInput() {
             }
             const date = `${time.getHours()}:${minutes}, ${time.getDate()}/${time.getMonth() + 1}/${time.getFullYear()}`
 
-            await Axios.post("http://localhost:5000/home/post",
+            await Axios.post(`${url}/home/post`,
                 {
                     publisherId: userData.id,
                     content: text,

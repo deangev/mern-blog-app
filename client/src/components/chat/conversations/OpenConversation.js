@@ -9,6 +9,7 @@ import { useSocket } from '../../../context/SocketProvider';
 import { FaCrown } from 'react-icons/fa'
 import { AiFillMinusCircle, AiOutlineSend } from 'react-icons/ai'
 import ContactsContext from '../../../context/ContactsContext';
+import { url } from '../../../context/urlProvider'
 import Errors from '../../misc/Errors';
 
 export default function OpenConversation() {
@@ -18,25 +19,25 @@ export default function OpenConversation() {
     const [modalOpen3, setModalOpen3] = useState(false);
     const [removeUser, setRemoveUser] = useState();
     const { userData } = useContext(UserContext);
-    const [selectedContactIds, setSelectedContactIds] = useState([])
-    const { conversations, selectedConversation, setSelectedConversation } = useContext(ConversationsContext)
-    const { contacts } = useContext(ContactsContext)
+    const [selectedContactIds, setSelectedContactIds] = useState([]);
+    const { conversations, setConversations, selectedConversation, setSelectedConversation } = useContext(ConversationsContext);
+    const { contacts } = useContext(ContactsContext);
     const [error, setError] = useState();
-    const socket = useSocket()
+    const socket = useSocket();
 
     const setRef = useCallback(node => {
         if (node) {
             node.scrollIntoView({ smooth: true })
         }
     }, [])
-    
+
     const handleSubmitContact = async (e) => {
         e.preventDefault()
         const addContactToConversation = async (req, res) => {
             try {
                 console.log(selectedContactIds);
                 closeModal3()
-                await Axios.post("http://localhost:5000/chat/add-contacts-to-conversation", {
+                await Axios.post(`${url}/chat/add-contacts-to-conversation`, {
                     contacts: selectedContactIds,
                     conversationId: selectedConversation[0].id
                 })
@@ -83,7 +84,7 @@ export default function OpenConversation() {
 
     }, [selectedConversation, userData.id])
 
-    /////////////////
+    ///////////////
     useEffect(() => {
         if (socket == null) return
 
@@ -92,8 +93,23 @@ export default function OpenConversation() {
 
         return () => socket.off('receive-message')
     }, [socket, addMessageToConversation])
-    /////////////////
+    ///////////////
 
+    useEffect(() => {
+        const getConversations = async () => {
+            let token = localStorage.getItem('auth-token');
+            if (token) {
+                let allConversations = await Axios.get(
+                    `${url}/chat/get-conversations`,
+                    { headers: { "x-auth-token": token } }
+                );
+                setConversations(allConversations.data)
+            }
+        }
+        getConversations();
+    }, [userData.email, setConversations])
+
+    //////////////////////
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -101,7 +117,7 @@ export default function OpenConversation() {
             let conversationRec = selectedConversation[0].id
             socket.emit('send-message', { conversationRec, senderName, text })
             await Axios.post(
-                'http://localhost:5000/chat/message',
+                `${url}/chat/message`,
                 {
                     senderId: userData.id,
                     senderName: userData.name,
@@ -165,7 +181,7 @@ export default function OpenConversation() {
             selectedConversation[0].contacts.splice(index, 1)
             closeModal2()
             await Axios.post(
-                'http://localhost:5000/chat/delete-conversation-contact',
+                `${url}/chat/delete-conversation-contact`,
                 {
                     userId: removeUser.id,
                     conversationId: selectedConversation[0].id
@@ -181,7 +197,7 @@ export default function OpenConversation() {
         e.preventDefault()
         try {
             Axios.post(
-                "http://localhost:5000/chat/delete-conversation",
+                `${url}/chat/delete-conversation`,
                 {
                     userId: userData.id,
                     conversationId: selectedConversation[0].id
@@ -279,7 +295,7 @@ export default function OpenConversation() {
                             Add contacts
                         </Button>}
 
-                        <Button id="leave-conversation-button" variant="outline-danger" className='rounded-0' style={{position: `${selectedConversation[0].contacts[0].id !== userData.id &&'absolute'}`, bottom: `${selectedConversation[0].contacts[0].id !== userData.id && '0'}`, left: `${selectedConversation[0].contacts[0].id !== userData.id && '0'}`}} onClick={() => setModalOpen(true)}>
+                        <Button id="leave-conversation-button" variant="outline-danger" className='rounded-0' style={{ position: `${selectedConversation[0].contacts[0].id !== userData.id && 'absolute'}`, bottom: `${selectedConversation[0].contacts[0].id !== userData.id && '0'}`, left: `${selectedConversation[0].contacts[0].id !== userData.id && '0'}` }} onClick={() => setModalOpen(true)}>
                             Leave conversation
                         </Button>
                     </div>
@@ -294,7 +310,7 @@ export default function OpenConversation() {
                                         selectedConversation[0].contacts.some(c => c.id === contact.id) ? null :
                                             <Form.Group controlId={contact.id} key={contact.id}>
                                                 <Form.Check
-                                                    style={{fontSize: '1.9rem', color: '#1877f2', paddingLeft: '2.4rem'}}
+                                                    style={{ fontSize: '1.9rem', color: '#1877f2', paddingLeft: '2.4rem' }}
                                                     type="checkbox"
                                                     value={selectedContactIds.includes(contact.id)}
                                                     label={contact.name}

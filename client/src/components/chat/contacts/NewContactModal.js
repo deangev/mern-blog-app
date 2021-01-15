@@ -3,19 +3,19 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import UserContext from '../../../context/UserContext';
 import Axios from 'axios';
 import Errors from '../../misc/Errors';
+import { url } from '../../../context/urlProvider'
 import './newContactModal.css';
 
 export default function NewContactModal({ closeModal }) {
     const [id, setId] = useState();
     const [error, setError] = useState();
-
     const { userData } = useContext(UserContext)
 
     const submit = async (e) => {
         e.preventDefault();
         try {
             const myEmail = userData.email
-            await Axios.post('http://localhost:5000/chat/contact', {
+            await Axios.post(`${url}/chat/contact`, {
                 id,
                 email: myEmail
             })

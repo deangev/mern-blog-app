@@ -8,6 +8,11 @@
     color: #1877f2;
 }
 
+.my-profile-name {
+    font-size: 10rem !important;
+    text-align: center;
+}
+
 #update-profile-button {
     color: #1877f2;
     font-size: 1.6rem;

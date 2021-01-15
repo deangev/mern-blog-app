@@ -4,6 +4,7 @@ import { Button, ListGroup, Modal } from 'react-bootstrap'
 import { AiFillMinusCircle } from 'react-icons/ai'
 import ContactsContext from '../../../context/ContactsContext'
 import UserContext from '../../../context/UserContext'
+import { url } from '../../../context/urlProvider'
 import './contacts.css'
 
 export default function Contacts() {
@@ -15,7 +16,7 @@ export default function Contacts() {
     const deleteContact = async () => {
         try {
             await Axios.post(
-                'http://localhost:5000/chat/delete-contact',
+                `${url}/chat/delete-contact`,
                 {
                     userId: userData.id,
                     contactId: selectedContact.id

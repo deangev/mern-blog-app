@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import ContactsContext from '../../../context/ContactsContext';
 import UserContext from '../../../context/UserContext';
+import { url } from '../../../context/urlProvider'
 import Errors from '../../misc/Errors';
 import './newConversationModal.css'
 
@@ -12,13 +13,13 @@ export default function NewConversationModal({ closeModal }) {
     const [selectedContactIds, setSelectedContactIds] = useState([myUser])
     const { contacts } = useContext(ContactsContext)
     const [error, setError] = useState();
-    const [conversationName, setConversationName] = useState()
+    const [conversationName, setConversationName] = useState();
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         const createConversation = async (req, res) => {
             try {
-                await Axios.post("http://localhost:5000/chat/conversation", {
+                await Axios.post(`${url}/chat/conversation`, {
                     name: conversationName,
                     contacts: selectedContactIds
                 })

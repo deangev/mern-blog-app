@@ -4,6 +4,7 @@ import UserContext from '../../../context/UserContext';
 import './login.css';
 import Errors from '../../misc/Errors';
 import Axios from 'axios';
+import { url } from '../../../context/urlProvider'
 
 export default function Login() {
     const [email, setEmail] = useState()
@@ -17,12 +18,13 @@ export default function Login() {
         try {
             const loginUser = { email, password };
             const loginRes = await Axios.post(
-                "http://localhost:5000/users/login",
+                `${url}/users/login`,
                 loginUser
             );
             setUserData({
                 token: loginRes.data.token,
                 name: loginRes.data.name,
+                lastName: loginRes.data.lastName,
                 id: loginRes.data.id,
                 email: loginRes.data.email,
                 profile: loginRes.data.profile,

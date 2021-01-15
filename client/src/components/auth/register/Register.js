@@ -4,6 +4,7 @@ import UserContext from '../../../context/UserContext';
 import Axios from 'axios';
 import './register.css';
 import Errors from '../../misc/Errors'
+import { url } from '../../../context/urlProvider'
 
 export default function Register() {
     const [firstName, setFirstName] = useState();
@@ -21,19 +22,22 @@ export default function Register() {
         try {
             const newUser = { firstName, lastName, email, password, passwordCheck }
             await Axios.post(
-                "http://localhost:5000/users/register",
+                `${url}/users/register`,
                 newUser
             );
             const loginRes = await Axios.post(
-                "http://localhost:5000/users/login", {
+                `${url}/users/login`, {
                 email,
                 password
             });
             setUserData({
                 token: loginRes.data.token,
                 name: loginRes.data.name,
+                lastName: loginRes.data.lastName,
                 id: loginRes.data.id,
-                email: loginRes.data.email
+                email: loginRes.data.email,
+                profile: loginRes.data.profile,
+                gallery: loginRes.data.gallery
             });
             localStorage.setItem("auth-token", loginRes.data.token)
             history.push('/')

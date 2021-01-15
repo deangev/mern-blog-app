@@ -172,6 +172,50 @@
     border-bottom-right-radius: 2rem;
 }
 
+.profile-modal .modal-content, .profile-modal .modal-dialog, .profile-modal-body {
+    width: 100%;
+    border-radius: 1rem;
+}
+
+.profile-modal-body {
+    position: relative;
+}
+
+.profile-modal-img {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+}
+
+.profile-modal-img-container {
+    position: relative;
+    top: 1.5rem;
+}
+
+.profile-modal-name-container {
+    position: relative;
+    left: 10rem;
+    bottom: 1.3rem;
+}
+
+.profile-modal-name-container h2 {
+    font-size: 2.3rem;
+}
+
+.profile-modal-gallery-container {
+    margin-top: 4rem;
+    font-size: 1.6rem;
+    font-weight: 500;
+    padding-bottom: 2rem;
+}
+
+.profile-modal-gallery-img {
+    margin: .2rem;
+    width: 10rem;
+    height: 10rem;
+}
+
+
 @media only screen  and (max-width: 1450px) {
     .posts-container {
         top: 24rem;
@@ -184,6 +228,10 @@
         margin: 0 auto;
         width: 50%;
         margin-bottom: 5rem;
+    }
+
+    .profile-modal .modal-content, .profile-modal .modal-dialog, .profile-modal-body {
+        width: 99%;
     }
 }
 

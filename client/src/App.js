@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import UserContext from './context/UserContext'
+import UserContext from './context/UserContext';
 import Axios from 'axios'
 import Login from './components/auth/login/Login';
 import Register from './components/auth/register/Register';
@@ -12,6 +12,7 @@ import ContactsProvider from './context/ContactsContext'
 import ConversationsProvider from './context/ConversationsContext'
 import SocketProvider from './context/SocketProvider'
 import PostsProvider from './context/PostsProvider'
+import { url } from './context/urlProvider'
 import Profile from './components/pages/Profile';
 
 export default function App() {
@@ -44,18 +45,19 @@ export default function App() {
                 token = ""
             }
             const tokenRes = await Axios.post(
-                "http://localhost:5000/users/tokenIsValid",
+                `${url}/users/tokenIsValid`,
                 null,
                 { headers: { "x-auth-token": token } }
             )
             if (tokenRes.data) {
                 const userRes = await Axios.get(
-                    "http://localhost:5000/users/",
+                    `${url}/users/`,
                     { headers: { "x-auth-token": token } }
                 )
                 setUserData({
                     token,
                     name: userRes.data.name,
+                    lastName: userRes.data.lastName,
                     id: userRes.data.id,
                     email: userRes.data.email,
                     profile: userRes.data.profile,
@@ -73,7 +75,7 @@ export default function App() {
             let token = localStorage.getItem('auth-token');
             if (token) {
                 let allContacts = await Axios.get(
-                    "http://localhost:5000/chat/get-contacts",
+                    `${url}/chat/get-contacts`,
                     { headers: { "x-auth-token": token } }
                 );
                 setContacts(allContacts.data)
@@ -87,7 +89,7 @@ export default function App() {
             let token = localStorage.getItem('auth-token');
             if (token) {
                 let allConversations = await Axios.get(
-                    "http://localhost:5000/chat/get-conversations",
+                    `${url}/chat/get-conversations`,
                     { headers: { "x-auth-token": token } }
                 );
                 setConversations(allConversations.data)
@@ -99,7 +101,7 @@ export default function App() {
     useEffect(() => {
         const getPosts = async () => {
             let allPosts = await Axios.get(
-                "http://localhost:5000/home/get-posts"
+                `${url}/home/get-posts`
             )
             const postArray = allPosts.data.reverse();
             setPosts(postArray)
