@@ -164,6 +164,7 @@ export default function OpenConversation() {
 
     function closeModal2() {
         setModalOpen2(false)
+        setRemoveUser()
     }
 
     function closeModal3() {
@@ -266,7 +267,7 @@ export default function OpenConversation() {
                                                         <Modal.Header className="leave-modal-header" closeButton>Leave conversation</Modal.Header>
                                                         <Modal.Body className="leave-modal-body">
                                                             <Modal.Title id="modal-title-leave">Are you sure you want to remove <br />{removeUser && removeUser.name}?</Modal.Title>
-                                                            <Button type="submit" id="button" className="cancel-button" onClick={() => setRemoveUser(index)}>Cancel</Button>
+                                                            <Button type="submit" id="button" className="cancel-button" onClick={() => closeModal2()}>Cancel</Button>
                                                             <Button type="submit" onClick={() => removeConversationContact(index)} id="button" className="leave-button">Remove</Button>
                                                         </Modal.Body>
                                                     </>
